@@ -60,7 +60,7 @@ async def register_owner(nic:str = Form(...),
 
 
 # Endpoint for Register dog 
-@app.post('/register-dog')
+@app.post('/register_dog')
 async def register_dog(file: UploadFile = File(...), 
                        dog_name:str = Form(...), 
                        breed:str = Form(...), 
@@ -111,7 +111,7 @@ async def register_dog(file: UploadFile = File(...),
 
 
 # Endpoint for verify ownership 
-@app.post('/verify-ownership')
+@app.post('/verify_ownership')
 async def verify_ownership(file: UploadFile = File(...)):
     # Create a temporary directory
     temp_dir = tempfile.mkdtemp()
