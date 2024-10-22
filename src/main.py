@@ -12,7 +12,6 @@ from common_functions import put_owner
 from common_functions import get_registered_dogs
 from common_functions import put_register_dog
 from common_functions import get_registered_dog_and_owner
-from models.Owner import Owner 
 import os
 
 app = FastAPI()
@@ -35,7 +34,7 @@ async def registered_owners():
 
 
 # Endpoint for get owner by NIC
-@app.get('/registered_owners/{nic}', response_model=Owner)
+@app.get('/registered_owners/{nic}')
 async def registered_owner(nic: str):
     owner = get_owner_by_nic(nic)
     if owner:
