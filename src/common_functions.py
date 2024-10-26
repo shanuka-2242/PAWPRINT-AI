@@ -175,3 +175,30 @@ def get_dog_img_by_entry_id(entry_id: int):
     
     else:
         return None
+
+# Function to get registered dog list by owner NIC from the SQLite database
+def get_registered_dog_by_owner_nic(owner_nic: int):
+
+    # Connect to the SQLite database
+    conn = sqlite3.connect('Database/pawprint.db')
+    cursor = conn.cursor()
+
+    # SQL query to select the owner based on NIC
+    cursor.execute('SELECT * FROM tb_registered_dogs WHERE owner_nic = ?', (owner_nic,))
+    registered_dogs_list = cursor.fetchall()
+    conn.close()
+
+    # Return the dog if found, otherwise None
+    if registered_dogs_list:
+        registered_dogs_data = []
+        for registered_dog in registered_dogs_list:
+            registered_dog_data = {
+                'EntryID': registered_dog[0],
+                'Name': registered_dog[1],
+                'Breed': registered_dog[2],
+                'Age': registered_dog[3]
+                }
+            registered_dogs_data.append(registered_dog_data)
+        return registered_dogs_data
+    else:
+        return None

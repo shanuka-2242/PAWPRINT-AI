@@ -14,6 +14,7 @@ from common_functions import get_registered_dogs
 from common_functions import put_register_dog
 from common_functions import get_registered_dog_and_owner
 from common_functions import get_dog_img_by_entry_id
+from common_functions import get_registered_dog_by_owner_nic
 import os
 import io
 
@@ -219,7 +220,7 @@ async def verify_ownership(file: UploadFile = File(...)):
 
 # Endpoint to send image the image
 @app.get("/registered_dog_image/{entry_id}")
-async def get_dog_image(entry_id: int):
+async def get_registered_dog_image(entry_id: int):
     
     # Fetch image data from the database
     image_data = get_dog_img_by_entry_id(entry_id)
@@ -230,6 +231,19 @@ async def get_dog_image(entry_id: int):
          return StreamingResponse(io.BytesIO(image_data), media_type="image/jpeg")
     else:
         return HTTPException(status_code=404)
+    
+
+#Endpoint to get registered dog info by owner NIC
+@app.get("/registered_dog/{owner_nic}")
+async def get_dog_info_by_owner_nic(owner_nic: int):
+    
+    # Fetch image data from the database
+    dog_data = get_registered_dog_by_owner_nic(owner_nic)
+    
+    if dog_data:
+        return dog_data
+    else:
+        raise HTTPException(status_code=404)
     
 if __name__ == '__main__':
     uvicorn.run(app)
