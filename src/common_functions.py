@@ -143,7 +143,7 @@ def get_registered_dog_and_owner(entry_id:str):
                         'EntryID': registered_dog_info[0],
                         'Name': registered_dog_info[1],
                         'Breed': registered_dog_info[2],
-                        'Age': registered_dog_info[3]
+                        'Age': str(registered_dog_info[3])
                     },
                     'Owner':{
                         'NIC': owner_info['NIC'],
