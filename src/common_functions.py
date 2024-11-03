@@ -172,12 +172,11 @@ def get_dog_img_by_entry_id(entry_id: int):
 
     if dog_image:
         return dog_image[0]
-    
     else:
         return None
 
 # Function to get registered dog list by owner NIC from the SQLite database
-def get_registered_dog_by_owner_nic(owner_nic: int):
+def get_registered_dog_list_by_owner_nic(owner_nic: int):
 
     # Connect to the SQLite database
     conn = sqlite3.connect('Database/pawprint.db')

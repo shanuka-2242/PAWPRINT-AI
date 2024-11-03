@@ -14,7 +14,7 @@ from common_functions import get_registered_dogs
 from common_functions import put_register_dog
 from common_functions import get_registered_dog_and_owner
 from common_functions import get_dog_img_by_entry_id
-from common_functions import get_registered_dog_by_owner_nic
+from common_functions import get_registered_dog_list_by_owner_nic
 import os
 import io
 
@@ -238,7 +238,7 @@ async def get_registered_dog_image(entry_id: int):
 async def get_dog_info_by_owner_nic(owner_nic: int):
     
     # Fetch image data from the database
-    dog_data = get_registered_dog_by_owner_nic(owner_nic)
+    dog_data = get_registered_dog_list_by_owner_nic(owner_nic)
     
     if dog_data:
         return dog_data
