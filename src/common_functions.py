@@ -175,6 +175,25 @@ def get_dog_img_by_entry_id(entry_id: int):
     else:
         return None
 
+#Function to remove registered dog from EntryID
+def remove_dog_by_entry_id(entry_id: int):
+    # Connect to the SQLite database
+    conn = sqlite3.connect('Database/pawprint.db')
+    cursor = conn.cursor()
+    
+    # Execute delete statement
+    cursor.execute("DELETE FROM tb_registered_dogs WHERE id = ?;", (entry_id,))
+    
+    # Check if the deletion was successful
+    rows_deleted = cursor.rowcount  # Gets number of rows affected by the delete statement
+    conn.commit()  # Commit the transaction
+    conn.close()   # Close the connection
+
+    if rows_deleted > 0:
+        return True  # Successfully deleted
+    else:
+        return False  # No row found to delete
+        
 # Function to get registered dog list by owner NIC from the SQLite database
 def get_registered_dog_list_by_owner_nic(owner_nic: int):
 

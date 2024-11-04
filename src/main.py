@@ -15,6 +15,7 @@ from common_functions import put_register_dog
 from common_functions import get_registered_dog_and_owner
 from common_functions import get_dog_img_by_entry_id
 from common_functions import get_registered_dog_list_by_owner_nic
+from common_functions import remove_dog_by_entry_id
 import os
 import io
 
@@ -233,7 +234,7 @@ async def get_registered_dog_image(entry_id: int):
         return HTTPException(status_code=404)
     
 
-#Endpoint to get registered dog info by owner NIC
+# Endpoint to get registered dog info by owner NIC
 @app.get("/registered_dog/{owner_nic}")
 async def get_dog_info_by_owner_nic(owner_nic: int):
     
@@ -242,6 +243,18 @@ async def get_dog_info_by_owner_nic(owner_nic: int):
     
     if dog_data:
         return dog_data
+    else:
+        raise HTTPException(status_code=404)
+
+# Endpoint to remove registered dog info by EntryID
+@app.delete("/registered_dog/{entry_id}")
+async def remove_registered_dog_by_entry_id(entry_id: int):
+    
+    # Remove registered dog from the database
+    dog_data = remove_dog_by_entry_id(entry_id)
+    
+    if dog_data:
+        return Response(status_code=200)
     else:
         raise HTTPException(status_code=404)
     
