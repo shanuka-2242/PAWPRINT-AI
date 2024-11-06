@@ -16,8 +16,11 @@ from common_functions import get_registered_dog_and_owner
 from common_functions import get_dog_img_by_entry_id
 from common_functions import get_registered_dog_list_by_owner_nic
 from common_functions import remove_dog_by_entry_id
+from common_functions import get_dog_imgs_by_owner_nic
 import os
 import io
+from typing import List
+import base64
 
 
 app = FastAPI()
@@ -219,9 +222,9 @@ async def verify_ownership(file: UploadFile = File(...)):
         return HTTPException(status_code=404)
     
 
-# Endpoint to send image the image
+# Endpoint to get registered dog image by entryID 
 @app.get("/registered_dog_image/{entry_id}")
-async def get_registered_dog_image(entry_id: int):
+async def get_registered_dog_image_by_entry_id(entry_id: int):
     
     # Fetch image data from the database
     image_data = get_dog_img_by_entry_id(entry_id)
@@ -230,6 +233,21 @@ async def get_registered_dog_image(entry_id: int):
         
         # Send image as a streaming response
          return StreamingResponse(io.BytesIO(image_data), media_type="image/jpeg")
+    else:
+        return HTTPException(status_code=404)
+    
+
+# Endpoint to get registered dog image by owner nic
+@app.get("/registered_dog_images/{nic}", response_model=List[str])
+async def get_registered_dog_images_by_nic(nic: str):
+    
+    # Fetch image data from the database
+    image_data = get_dog_imgs_by_owner_nic(nic)
+    
+    if image_data:
+        # Convert each image to Base64
+        images_base64 = [base64.b64encode(img).decode('utf-8') for img in image_data]
+        return images_base64
     else:
         return HTTPException(status_code=404)
     

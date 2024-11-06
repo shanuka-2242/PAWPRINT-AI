@@ -157,7 +157,7 @@ def get_registered_dog_and_owner(entry_id:str):
     else:
         return None 
     
-# Function to get dog image from the database
+# Function to get dog image from the database by entry ID
 def get_dog_img_by_entry_id(entry_id: int):
 
     # Connect to the SQLite database
@@ -174,6 +174,22 @@ def get_dog_img_by_entry_id(entry_id: int):
         return dog_image[0]
     else:
         return None
+    
+# Function to get dog images from the database by owner NIC
+def get_dog_imgs_by_owner_nic(nic: str):
+
+    # Connect to the SQLite database
+    conn = sqlite3.connect('Database/pawprint.db')
+    cursor = conn.cursor()
+    
+    # Fetch image data based on the owner's NIC
+    cursor.execute("SELECT dog_image FROM tb_registered_dogs WHERE owner_nic = ?", (nic,))
+    dog_images = cursor.fetchall()
+    
+    conn.close()
+
+    return [img[0] for img in dog_images] if dog_images else None
+
 
 #Function to remove registered dog from EntryID
 def remove_dog_by_entry_id(entry_id: int):
