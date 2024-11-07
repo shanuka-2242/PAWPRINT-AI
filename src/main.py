@@ -1,5 +1,4 @@
 from fastapi import FastAPI,UploadFile,File,Form,HTTPException,Response
-from fastapi.responses import StreamingResponse
 import uvicorn
 import shutil
 import tempfile
@@ -15,10 +14,7 @@ from common_functions import put_register_dog
 from common_functions import get_registered_dog_and_owner
 from common_functions import get_registered_dog_list_by_owner_nic
 from common_functions import remove_dog_by_entry_id
-from common_functions import get_dog_imgs_by_owner_nic
 import os
-from typing import List
-import base64
 
 
 app = FastAPI()
@@ -218,22 +214,7 @@ async def verify_ownership(file: UploadFile = File(...)):
         
     else:
         return HTTPException(status_code=404)
-    
 
-# Endpoint to get registered dog image by owner nic
-@app.get("/registered_dog_images/{nic}", response_model=List[str])
-async def get_registered_dog_images_by_nic(nic: str):
-    
-    # Fetch image data from the database
-    image_data = get_dog_imgs_by_owner_nic(nic)
-    
-    if image_data:
-        # Convert each image to Base64
-        images_base64 = [base64.b64encode(img).decode('utf-8') for img in image_data]
-        return images_base64
-    else:
-        return HTTPException(status_code=404)
-    
 
 # Endpoint to get registered dog info by owner NIC
 @app.get("/registered_dog/{owner_nic}")
@@ -247,6 +228,7 @@ async def get_dog_info_by_owner_nic(owner_nic: int):
     else:
         raise HTTPException(status_code=404)
 
+
 # Endpoint to remove registered dog info by EntryID
 @app.delete("/registered_dog/{entry_id}")
 async def remove_registered_dog_by_entry_id(entry_id: int):
@@ -259,5 +241,6 @@ async def remove_registered_dog_by_entry_id(entry_id: int):
     else:
         raise HTTPException(status_code=404)
     
+
 if __name__ == '__main__':
     uvicorn.run(app)
