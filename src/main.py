@@ -13,12 +13,10 @@ from common_functions import put_owner
 from common_functions import get_registered_dogs
 from common_functions import put_register_dog
 from common_functions import get_registered_dog_and_owner
-from common_functions import get_dog_img_by_entry_id
 from common_functions import get_registered_dog_list_by_owner_nic
 from common_functions import remove_dog_by_entry_id
 from common_functions import get_dog_imgs_by_owner_nic
 import os
-import io
 from typing import List
 import base64
 
@@ -218,21 +216,6 @@ async def verify_ownership(file: UploadFile = File(...)):
         else:
             return HTTPException(status_code=404)
         
-    else:
-        return HTTPException(status_code=404)
-    
-
-# Endpoint to get registered dog image by entryID 
-@app.get("/registered_dog_image/{entry_id}")
-async def get_registered_dog_image_by_entry_id(entry_id: int):
-    
-    # Fetch image data from the database
-    image_data = get_dog_img_by_entry_id(entry_id)
-    
-    if image_data:
-        
-        # Send image as a streaming response
-         return StreamingResponse(io.BytesIO(image_data), media_type="image/jpeg")
     else:
         return HTTPException(status_code=404)
     

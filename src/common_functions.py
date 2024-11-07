@@ -1,4 +1,5 @@
 import sqlite3
+import base64
 
 # Function to get an owner by NIC from the SQLite database
 def get_owner_by_nic(nic: str):
@@ -137,13 +138,17 @@ def get_registered_dog_and_owner(entry_id:str):
     # Return the owner if found, otherwise None
     if registered_dog_info:
         owner_info = get_owner_by_nic(registered_dog_info[5])
+        
+        # Convert dog image to base 64 format
+        dog_image_base64 = base64.b64encode(registered_dog_info[6]).decode('utf-8')
         if owner_info:
             verifiedData = {
                     'Dog':{
                         'EntryID': registered_dog_info[0],
                         'Name': registered_dog_info[1],
                         'Breed': registered_dog_info[2],
-                        'Age': str(registered_dog_info[3])
+                        'Age': registered_dog_info[3],
+                        'DogImage': dog_image_base64
                     },
                     'Owner':{
                         'NIC': owner_info['NIC'],
@@ -157,23 +162,6 @@ def get_registered_dog_and_owner(entry_id:str):
     else:
         return None 
     
-# Function to get dog image from the database by entry ID
-def get_dog_img_by_entry_id(entry_id: int):
-
-    # Connect to the SQLite database
-    conn = sqlite3.connect('Database/pawprint.db')
-    cursor = conn.cursor()
-    
-    # Fetch image data based on the dog's ID
-    cursor.execute("SELECT dog_image FROM tb_registered_dogs WHERE id = ?", (entry_id,))
-    dog_image = cursor.fetchone()
-    
-    conn.close()
-
-    if dog_image:
-        return dog_image[0]
-    else:
-        return None
     
 # Function to get dog images from the database by owner NIC
 def get_dog_imgs_by_owner_nic(nic: str):
